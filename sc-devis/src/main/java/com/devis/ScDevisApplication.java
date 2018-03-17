@@ -15,16 +15,17 @@ public class ScDevisApplication {
 	}
 	
 	/**
-	 * 
 	 * @return
 	 */
+	
 	@Bean
 	public WebMvcConfigurer corsConfigurer() {
 	    return new WebMvcConfigurerAdapter() {
 	        @Override
 	        public void addCorsMappings(CorsRegistry registry) {
 	            registry.addMapping("/**").allowedOrigins("http://localhost:4200");
-	        }
+	        } 
 	    };
 	}
+	
 }

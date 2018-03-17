@@ -1,10 +1,9 @@
 package com.devis.data.entity;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
@@ -33,24 +33,20 @@ public class Category implements Serializable {
 	@Column(name = "\"DESCRIPTION\"")
 	private String description;
 	
-	@Column(name = "\"DATE_CREATE\"")
-	private LocalDateTime dateCreate;
-	
-	@Column(name = "\"DATE_MODIFICATION\"")
-	private LocalDateTime dateModification;
-	
-	/**
-	 * Recursive Parent Child relationship in JPA 
-	 */
-	
-	// Recursion
+	// Recursion 
 	@ManyToOne
-	@JoinColumn(name = "\"FK_ID_CATEGORY\"")
-	private Category category;
+	@JoinColumn(name = "\"FK_ID_PARENT_CATEGORY\"")
+	private Category mainCategory;
 	
 	// Recursion
-	@OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
-    List<Category > categoryList = new ArrayList<Category>();
+	@OneToMany(mappedBy = "mainCategory", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+	private List<Category> subCategory;
+	
+	/*******/
+	
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
 
 	public Long getId() {
 		return id;
@@ -76,40 +72,20 @@ public class Category implements Serializable {
 		this.description = description;
 	}
 
-	public LocalDateTime getDateCreate() {
-		return dateCreate;
+	public Category getMainCategory() {
+		return mainCategory;
 	}
 
-	public void setDateCreate(LocalDateTime dateCreate) {
-		this.dateCreate = dateCreate;
+	public void setMainCategory(Category mainCategory) {
+		this.mainCategory = mainCategory;
 	}
 
-	public LocalDateTime getDateModification() {
-		return dateModification;
+	public List<Category> getSubCategory() {
+		return subCategory;
 	}
 
-	public void setDateModification(LocalDateTime dateModification) {
-		this.dateModification = dateModification;
-	}
-
-	public Category getCategory() {
-		return category;
-	}
-
-	public void setCategory(Category category) {
-		this.category = category;
-	}
-
-	public List<Category> getCategoryList() {
-		return categoryList;
-	}
-
-	public void setCategoryList(List<Category> categoryList) {
-		this.categoryList = categoryList;
-	}
-
-	public static long getSerialversionuid() {
-		return serialVersionUID;
+	public void setSubCategory(List<Category> subCategory) {
+		this.subCategory = subCategory;
 	}
 	
 	
